@@ -14,10 +14,11 @@ public class TreeNode : MonoBehaviour
      * based on WindModel calculations and parameters.
      * 
      **************************************************************************/
-    float Rn;               // Node rigidity
-    float Wn;               // Wind load at this node
-    float MAX_Rotation;     // Maximum amount this node can rotate in Deg
-    float MIN_Rotation;     // Minimum amount this node can rotate in Deg
+    // TODO: These are set to public for in-Unity testing purposes. We may want 
+    // to set them back to private once everything is complete.
+    public float Rn;               // Node rigidity
+    public float Wn;               // Wind load at this node
+    public float MAX_Rotation;     // Maximum amount this node can rotate in Deg
 
 
     // TODO: Add code to support selection based on primitive(s) collider(s)
@@ -97,8 +98,21 @@ public class TreeNode : MonoBehaviour
 
     // TODO: Need a method for applying the Wind Model formula at this node
 
+    // TODO: Should this go in WindModel and TreeNode just calls it by passing
+    // the current node to the WindModel??
 
-
+    /************************* CalculateWindRotation ***********************//**
+     *   Calculates the maximum effect of the supplied wind vector at this node.
+     *   
+     *       @param     windVector      Vector3 representing the wind direction
+     *                                  and wind strength (magnitude of vector).
+     *                             
+     **************************************************************************/
+    public void CalculateGustMaxima(Vector3 windVector)
+    {
+        Quaternion Q = this.PrimitiveList[0].GetMaxGustRotationOnNode(windVector, MAX_Rotation);
+    }
+    
     /*                                                                        */
     /************************** END Wind Simulation ***************************/
 
@@ -131,44 +145,33 @@ public class TreeNode : MonoBehaviour
     }
 
     /************************** SetWindLoadAtNode **************************//**
-    * Sets the value of Wn. 
-    * Should generally only be used by the wind system to establish a wind load 
-    * value based on the current wind vector, the tree's shape, and the way the 
-    * wind hits the tree. This is all calculated by the wind system.
-    *        
-    ***************************************************************************/
+     * Sets the value of Wn. 
+     * Should generally only be used by the wind system to establish a wind load 
+     * value based on the current wind vector, the tree's shape, and the way the 
+     * wind hits the tree. This is all calculated by the wind system.
+     *        
+     **************************************************************************/
     public void SetWindLoadAtNode(float windLoad)
     {
         Wn = windLoad;
     }
 
     /**************************** SetMaxRotation ***************************//**
-    * Sets the value of MAX_Rotation. 
-    * Should generally only be used by the wind system to set a reasonable range
-    * of rotation based on node depth.
-    *        
-    ***************************************************************************/
+     * Sets the value of MAX_Rotation. 
+     * Should generally only be used by the wind system to set a reasonable 
+     * range of rotation based on node depth.
+     *        
+     ***************************************************************************/
     public void SetMaxRotation(float max)
     {
         MAX_Rotation = max;
     }
 
-    /**************************** SetMinRotation ***************************//**
-    * Sets the value of MIN_Rotation. 
-    * Should generally only be used by the wind system to set a reasonable range
-    * of rotation based on node depth.
-    *        
-    ***************************************************************************/
-    public void SetMinRotation(float min)
-    {
-        MIN_Rotation = min;
-    }
-
     /*************************** GetBranchThickness ************************//**
-    * Gets an approximation of branch thickness at this node based on the 
-    * average of the node's x-scale and y-scale
-    *        
-    ***************************************************************************/
+     * Gets an approximation of branch thickness at this node based on the 
+     * average of the node's x-scale and y-scale
+     *        
+     **************************************************************************/
     public float GetBranchThickness()
     {
         Vector3 v = this.PrimitiveList[0].TRS_matrix.lossyScale;
@@ -176,10 +179,10 @@ public class TreeNode : MonoBehaviour
     }
 
     /*************************** ClampNodeRigidity *************************//**
-    * Clamps the value of Rn (Node Rigidity) to a range of 0 to 1 so that other
-    * calculations that rely on it can safely assume its range.
-    *        
-    ***************************************************************************/
+     * Clamps the value of Rn (Node Rigidity) to a range of 0 to 1 so that other
+     * calculations that rely on it can safely assume its range.
+     *        
+     **************************************************************************/
     private void ClampNodeRigidity()
     {
         // TODO: Create improved method of clamping(ideally with some sort of

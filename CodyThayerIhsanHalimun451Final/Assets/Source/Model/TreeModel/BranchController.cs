@@ -40,24 +40,32 @@ public class BranchController : MonoBehaviour
 
 
     // Should only be called AFTER all node matrices have been calculated and
-    // updated.
+    // updated (included wind simulation on TreeNodePrimitives).
     public void DeformMesh()
     {
         int nIndex = 0;
         foreach (TreeNode tn in branchNodes)
         {
-            DeformationHelper(nIndex, tn);
+            DeformVertRingsHelper(nIndex, tn);
             ++nIndex;
         }
+        // TODO: Handle end-point of branch
+        // TODO: Recalculate Normals after verts move
     }
 
-    private void DeformationHelper(int n, TreeNode tn)
+    private void DeformVertRingsHelper(int n, TreeNode tn)
     {
         int nIndex = GetVertexRingStartByNode(n);
         Matrix4x4 nMatrix = tn.PrimitiveList[0].TRS_matrix;
-        //Vector3 P = GetRingPivot(nIndex);     // Ring Pivot (shouldn't be necessary because it should match the nodePrimitive pivot)
-        //Quaternion Q = nMatrix.rotation;      // Shouldn't need to decompose TRS, should just apply
-
+        
+        // Center of the ring should match the node's pivot so the matrix
+        // be applied directly to each vertex
+        for (int i = 0; i < cirSubdivs; ++i)
+        {
+            Vector3 vert = branchMesh.vertices[nIndex + i];
+            vert = nMatrix.MultiplyPoint(vert);
+            branchMesh.vertices[nIndex + i] = vert;
+        }
     }
 
     private int GetVertexRingStartByNode(int n)
@@ -76,16 +84,15 @@ public class BranchController : MonoBehaviour
         return sum * denom;
     }
 
+    // TODO: Implement mesh initialization for branch
+
     private Mesh InitializeBranchMesh()
     {
         Mesh bMesh = new Mesh();
         bMesh.Clear();
         //int totalVerts = (cirSubdivs * branchNodes.Count * linSubdivs) + 1;
         int totalVerts = (cirSubdivs * branchNodes.Count) + 1;
-
         bMesh.vertices = InitializeVertices(totalVerts);
-
-
         return bMesh;
     }
 

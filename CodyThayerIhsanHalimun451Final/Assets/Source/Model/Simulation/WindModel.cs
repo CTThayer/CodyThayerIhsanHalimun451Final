@@ -11,6 +11,14 @@ public class WindModel : MonoBehaviour
     private const float Pc = 0.613f;    // "Standard constant" for wind pressure
                                         //  calculations in Newtons/m^2
 
+    // TODO: Add code for updating/controlling the wind vector
+    // TODO: Add code for turning wind simulation on/off
+    // NOTE: Wind should be disabled (temporarily) whenever the wind vector is 
+    // changed because the recalculation of the WindLoad and re-weighting of
+    // wind force on the nodes will be an expensive operation.  Failing to 
+    // disable it will likely cause strange issues and/or have performance
+    // impacts.
+
 
     /************************** GetWindLoadOnTree **************************//**
     * Calculates the wind load on the tree (and it's individual components) 
