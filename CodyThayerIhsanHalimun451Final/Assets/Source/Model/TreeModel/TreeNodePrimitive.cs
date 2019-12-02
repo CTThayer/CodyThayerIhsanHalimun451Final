@@ -47,6 +47,15 @@ public class TreeNodePrimitive : MonoBehaviour
     *   variables in to the shader when this method is called.
     *                              
     **************************************************************************/
+    //New - Applies outside transform matrix M to the TRS_matrix before it is
+    //      sent to the shader.
+    public void LoadShaderMatrix(Matrix4x4 M)
+    {
+        Matrix4x4 updatedMatrix = TRS_matrix * M;
+        GetComponent<Renderer>().material.SetMatrix("MyXformMat", updatedMatrix);
+        GetComponent<Renderer>().material.SetColor("MyColor", MyColor);
+    }
+    //Original
     public void LoadShaderMatrix()
     {
         GetComponent<Renderer>().material.SetMatrix("MyXformMat", TRS_matrix);

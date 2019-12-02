@@ -20,6 +20,8 @@ public class TreeNode : MonoBehaviour
     public float Wn;               // Wind load at this node
     public float MAX_Rotation;     // Maximum amount this node can rotate in Deg
 
+    private Quaternion GustMaximum; // Stores the maximum rotation for this gust interval
+
 
     // TODO: Add code to support selection based on primitive(s) collider(s)
 
@@ -103,14 +105,16 @@ public class TreeNode : MonoBehaviour
 
     /************************* CalculateWindRotation ***********************//**
      *   Calculates the maximum effect of the supplied wind vector at this node.
+     *   This should be run at the BEGINNING of each gust interval.
      *   
      *       @param     windVector      Vector3 representing the wind direction
      *                                  and wind strength (magnitude of vector).
      *                             
      **************************************************************************/
-    public void CalculateGustMaxima(Vector3 windVector)
+    public Quaternion CalculateGustMaxima(Vector3 windVector)
     {
-        Quaternion Q = this.PrimitiveList[0].GetMaxGustRotationOnNode(windVector, MAX_Rotation);
+        GustMaximum = this.PrimitiveList[0].GetMaxGustRotationOnNode(windVector, MAX_Rotation);
+        return GustMaximum;
     }
     
     /*                                                                        */
