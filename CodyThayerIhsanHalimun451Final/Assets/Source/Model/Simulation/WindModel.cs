@@ -54,11 +54,19 @@ public class WindModel : MonoBehaviour
         }
         else if (Time.time < IntervalMid)
         {
-            tn.WSM.Step(true, WindVector);
+            Matrix4x4 WM = tn.WSM.Step(true, WindVector);
+            foreach(TreeNodePrimitive tnp in tn.PrimitiveList)
+            {
+                tnp.LoadShaderMatrix(WM);
+            }
         }
         else if (Time.time >= IntervalMid && Time.time < IntervalEnd)
         {
-            tn.WSM.Step(false, WindVector);
+            Matrix4x4 WM = tn.WSM.Step(false, WindVector);
+            foreach (TreeNodePrimitive tnp in tn.PrimitiveList)
+            {
+                tnp.LoadShaderMatrix(WM);
+            }
         }
     }
 
