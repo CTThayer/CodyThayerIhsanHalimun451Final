@@ -26,6 +26,11 @@ public class NodePrimitive : MonoBehaviour {
         TRS_matrix = nodeMatrix * p * trs * invp;
         GetComponent<Renderer>().material.SetMatrix("MyXformMat", TRS_matrix);
         GetComponent<Renderer>().material.SetColor("MyColor", MyColor);
+
+        Transform selectedCC = transform.GetChild(0);
+        selectedCC.position = TRS_matrix.GetColumn(3);
+        selectedCC.rotation = TRS_matrix.rotation;
+        selectedCC.localScale = TRS_matrix.lossyScale;
     }
 
     public Vector3 GetNodePrimitiveScale()

@@ -54,6 +54,10 @@ public class TreeNodePrimitive : MonoBehaviour
         Matrix4x4 updatedMatrix = TRS_matrix * M;
         GetComponent<Renderer>().material.SetMatrix("MyXformMat", updatedMatrix);
         GetComponent<Renderer>().material.SetColor("MyColor", MyColor);
+        Transform selectedCC = transform.GetChild(0);
+        selectedCC.position = TRS_matrix.GetColumn(3);
+        selectedCC.rotation = TRS_matrix.rotation;
+        selectedCC.localScale = TRS_matrix.lossyScale;
     }
     //Original
     public void LoadShaderMatrix()
