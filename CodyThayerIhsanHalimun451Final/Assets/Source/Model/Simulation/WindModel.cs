@@ -45,6 +45,20 @@ public class WindModel : MonoBehaviour
     private float IntervalEnd = 0;
     private float IntervalMid = 0;  // Unnecessary?
 
+    public void WindUpdate(TreeNode tn)
+    {
+        GustUpdate(tn);
+        foreach (Transform child in tn.transform)
+        {
+            TreeNode cn = child.GetComponent<TreeNode>();
+            if (cn != null)
+            {
+                WindUpdate(cn);
+            }
+        }
+    }
+
+
     public void GustUpdate(TreeNode tn)
     {
         if (Time.time >= IntervalEnd)
@@ -95,9 +109,9 @@ public class WindModel : MonoBehaviour
     *    @param    dragC    is the user specified drag coefficient for the tree
     *    
     ***************************************************************************/
-    public float GetWindLoadOnTree(DynamicTree tree, Vector3 wind, float dragC)
+    public float GetWindLoadOnTree(TreeNode treeNode, Vector3 wind, float dragC)
     {
-        float area = CalculateProjectedArea(tree, wind);
+        float area = CalculateProjectedArea(treeNode, wind);
         return CalculateWindLoad(area, dragC, wind);
     }
 
@@ -110,7 +124,7 @@ public class WindModel : MonoBehaviour
     *    @param    wind     is the wind vector
     *    
     ***************************************************************************/
-    private float CalculateProjectedArea(DynamicTree tree, Vector3 wind)
+    private float CalculateProjectedArea(TreeNode treeNode, Vector3 wind)
     {
         float area = 0;
 
