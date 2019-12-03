@@ -25,6 +25,12 @@ public class DynamicTree : MonoBehaviour
     void Update()
     {
         // TODO: Handle manipulator input and changes
+
+        // TODO: Implement and test the transform matrices being run
+        // TODO: Add if/else to check if the WindModel is running and if not, run only the TreeNode transforms/shader loading
+        Matrix4x4 i = Matrix4x4.identity;
+        root.CompositeXform(ref i);         // TODO: We can optimize this now. Since xforms are stored, this only really needs to be run when nodes are manipulated.
+        windModel.WindUpdate(root);
     }
 
     /*************************** Tree Configuration ***************************/
