@@ -29,7 +29,7 @@ public class WindSimNode : MonoBehaviour
 
     //TODO: DOES THIS WORK???
     // WIP Code
-    private Quaternion Step(bool forward, Vector3 WindVector)
+    public Quaternion Step(bool forward, Vector3 WindVector)
     {
         // Attempt 2 - Uses code from below (reformatted)
 
@@ -113,6 +113,7 @@ public class WindSimNode : MonoBehaviour
     *                               owns this TreeNodePrimitive)
     *                             
     **************************************************************************/
+    // TODO: Should this clamp to negative MAX_R in addition to positive MAX_R?
     private Quaternion ClampWindRotation(Quaternion Q, float MAX_R)
     {
         float theta;

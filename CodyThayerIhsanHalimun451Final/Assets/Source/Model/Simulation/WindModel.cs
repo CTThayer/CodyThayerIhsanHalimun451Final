@@ -49,25 +49,26 @@ public class WindModel : MonoBehaviour
     {
         if (Time.time >= IntervalEnd)
         {
-
+            InitializeInterval();
+            tn.WSM.InitializeStepping(WindVector, IntervalEnd);
         }
         else if (Time.time < IntervalMid)
         {
-
+            tn.WSM.Step(true, WindVector);
         }
         else if (Time.time >= IntervalMid && Time.time < IntervalEnd)
         {
-
+            tn.WSM.Step(false, WindVector);
         }
     }
 
-    public void InitializeInterval(Vector3 WindVector, float GustInterval, float Variance)
+    public void InitializeInterval()
     {
-        IntervalEnd = GetNextGustEndTime(GustInterval, Variance);
+        IntervalEnd = GetNextGustEndTime();
         IntervalMid = IntervalEnd / 2;
     }
 
-    private float GetNextGustEndTime(float GustInterval, float Variance)
+    private float GetNextGustEndTime()
     {
         float t = Time.time + GustInterval + (Random.Range(-1.0f, 1.0f) * Variance);
         Debug.Log("Current Time: " + Time.time);

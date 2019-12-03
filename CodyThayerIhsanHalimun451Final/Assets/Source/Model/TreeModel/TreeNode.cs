@@ -16,6 +16,7 @@ public class TreeNode : MonoBehaviour
      **************************************************************************/
     // TODO: These are set to public for in-Unity testing purposes. We may want 
     // to set them back to private once everything is complete.
+    public WindSimNode WSM;
     public float Rn;               // Node rigidity
     public float Wn;               // Wind load at this node
     public float MAX_Rotation;     // Maximum amount this node can rotate in Deg
