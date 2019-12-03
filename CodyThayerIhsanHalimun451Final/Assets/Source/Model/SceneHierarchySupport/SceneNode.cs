@@ -9,12 +9,13 @@ public class SceneNode : MonoBehaviour {
     public Vector3 NodeOrigin = Vector3.zero;
     public List<NodePrimitive> PrimitiveList;
 
+
 	// Use this for initialization
 	protected void Start () {
         InitializeSceneNode();
         // Debug.Log("PrimitiveList:" + PrimitiveList.Count);
 	}
-	
+
 
     private void InitializeSceneNode()
     {
@@ -27,6 +28,19 @@ public class SceneNode : MonoBehaviour {
         Instantiate(NewSN);
         NewSN.AddComponent<SceneNode>();
         NewSN.transform.parent = gameObject.transform;
+    }
+
+    public void DeleteSceneNode(GameObject g)
+    {
+        foreach (Transform child in g.transform)
+        {
+            if (child.GetComponent<SceneNode>() != null)
+            {
+                child.GetComponent<SceneNode>().NodeOrigin = g.GetComponent<SceneNode>().NodeOrigin;
+                child.transform.parent = g.transform.parent;
+            }
+        }
+        Destroy(g);
     }
 
     // This must be called _BEFORE_ each draw!! 
