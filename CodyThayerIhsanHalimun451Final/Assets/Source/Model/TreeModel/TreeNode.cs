@@ -41,18 +41,29 @@ public class TreeNode : MonoBehaviour
     }
 
 
-    public void AddSceneNode()
+    public void AddTreeNode()
     {
         // TODO: Likely needs logic to control how the node is added 
         // (i.e. add node inline on branch OR create new branch off of node)
 
         GameObject NewSN = new GameObject();
         Instantiate(NewSN);
-        NewSN.AddComponent<SceneNode>();
+        NewSN.AddComponent<TreeNode>();
         NewSN.transform.parent = gameObject.transform;
     }
 
-
+    public void DeleteTreeNode(GameObject g)
+    {
+        foreach (Transform child in g.transform)
+        {
+            if (child.GetComponent<TreeNode>() != null)
+            {
+                child.GetComponent<TreeNode>().NodeOrigin = g.GetComponent<TreeNode>().NodeOrigin;
+                child.transform.parent = g.transform.parent;
+            }
+        }
+        Destroy(g);
+    }
     /***************************** Xform Matrix *******************************/
     /*                                                                        */
 
