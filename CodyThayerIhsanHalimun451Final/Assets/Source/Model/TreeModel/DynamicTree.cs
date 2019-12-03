@@ -60,21 +60,4 @@ public class DynamicTree : MonoBehaviour
     /*                                                                        */
     /************************** End Mesh Generation ***************************/
 
-
-
-
-
-    /**************************** Wind Simulation *****************************/
-    /*                                                                        */
-    // TODO: Call WindModel functions in LateUpdate
-    //                      OR
-    //       Call WindModel functions in LateUpdate in WindModel
-
-
-
-    // TODO: Deform branch meshes based on associated nodes
-    //       matrices.  Needs to be done in LateUpdate AFTER
-    //       WindModel updates the node transforms
-    /*                                                                        */
-    /************************** End Wind Simulation ***************************/
 }
