@@ -29,7 +29,7 @@ public class NodePrimitive : MonoBehaviour {
         Transform selectedCC = transform.GetChild(0);
         selectedCC.position = TRS_matrix.GetColumn(3);
         selectedCC.rotation = TRS_matrix.rotation;
-        selectedCC.localScale = TRS_matrix.lossyScale;
+        //selectedCC.localScale = TRS_matrix.lossyScale;
     }
 
     public Vector3 GetNodePrimitiveScale()
