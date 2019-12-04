@@ -15,7 +15,10 @@ public class NodePrimitive : MonoBehaviour {
 
     void Update()
     {
-
+        Transform selectedCC = transform.GetChild(0);
+        selectedCC.position = TRS_matrix.GetColumn(3);
+        selectedCC.rotation = TRS_matrix.rotation;
+        selectedCC.localScale = TRS_matrix.lossyScale;
     }
   
 	public void LoadShaderMatrix(ref Matrix4x4 nodeMatrix)
@@ -27,10 +30,7 @@ public class NodePrimitive : MonoBehaviour {
         GetComponent<Renderer>().material.SetMatrix("MyXformMat", TRS_matrix);
         GetComponent<Renderer>().material.SetColor("MyColor", MyColor);
 
-        Transform selectedCC = transform.GetChild(0);
-        selectedCC.position = TRS_matrix.GetColumn(3);
-        selectedCC.rotation = TRS_matrix.rotation;
-        selectedCC.localScale = TRS_matrix.lossyScale;
+       
     }
 
     public Vector3 GetNodePrimitiveScale()
