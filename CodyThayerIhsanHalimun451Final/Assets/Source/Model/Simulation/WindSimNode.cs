@@ -19,11 +19,13 @@ public class WindSimNode : MonoBehaviour
 
     public void InitializeStepping(Vector3 WindVector, float end)
     {
-        Quaternion intervaMaxR = treeNode.CalculateGustMaxima(WindVector);
+        //Quaternion intervalMaxR = treeNode.CalculateGustMaxima(WindVector);
+
+        Quaternion intervalMaxR = GetMaxGustRotationOnNode(WindVector, treeNode.MAX_Rotation);
         float steps = (end - Time.time) / Time.deltaTime;
         float theta;
         Vector3 RotationAxis;
-        intervaMaxR.ToAngleAxis(out theta, out RotationAxis);
+        intervalMaxR.ToAngleAxis(out theta, out RotationAxis);
         StepRotation = theta / steps;
     }
 
@@ -75,7 +77,28 @@ public class WindSimNode : MonoBehaviour
         // Clamp and return
         Q = ClampWindRotation(Q, treeNode.MAX_Rotation);
         return Q;
+
     }
+
+    private Vector3 GetWindRotationAxis(Vector3 WindVector)
+    {
+        Vector3 UP = primitive.GetNodeUpVector();           // Do we need to account for WindMatrix Transform here???
+        
+        // Cross Product to get the axis of rotation
+        Vector3 Axis = Vector3.Cross(UP, WindVector);       // This might be backwards
+        return Axis.normalized;
+    }
+    
+    // Returns max rotation in degrees
+    //private float GetMaxGustRotation(Vector3 WindVector, float intervalLength)
+    //{
+    //    // Combine UP direction and WindVector, then normalize to get resulting direction
+    //    Vector3 resultDir = UP + WindVector;
+    //    resultDir = resultDir.normalized;
+
+    //    // Get rotation (quaternion) from current UP to resultDir
+    //    Quaternion R = Quaternion.FromToRotation(UP, resultDir);
+    //}
 
     /*********************** GetMaxGustRotationOnNode **********************//**
     *   Public method used calculate the maximum rotation that the supplied

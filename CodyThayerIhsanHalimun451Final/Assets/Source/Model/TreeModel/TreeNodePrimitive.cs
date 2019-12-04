@@ -69,6 +69,14 @@ public class TreeNodePrimitive : MonoBehaviour
     //}
 
 
+    public Vector3 GetNodeUpVector()
+    {
+        Vector3 A = TRS_matrix.MultiplyPoint(Vector3.zero);
+        Vector3 B = TRS_matrix.MultiplyPoint(Vector3.up);
+        Vector3 UP = B - A;
+        return UP.normalized;
+    }
+
     /************************** Wind System Support ***************************/
     /*                                                                        */
 

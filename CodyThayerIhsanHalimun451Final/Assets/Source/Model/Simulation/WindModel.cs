@@ -40,6 +40,8 @@ public class WindModel : MonoBehaviour
     private float IntervalEnd = 0;
     private float IntervalMid = 0;  // Unnecessary?
 
+    bool newInterval = true;
+
     public void WindUpdate(TreeNode tn)
     {
         GustUpdate(tn);
@@ -53,34 +55,69 @@ public class WindModel : MonoBehaviour
         }
     }
 
+    //// Original Version
+    //public void GustUpdate(TreeNode tn)
+    //{
+    //    if (newInterval)
+    //    {
+    //        InitializeInterval();
+    //        tn.WSM.InitializeStepping(WindVector, IntervalEnd);
+    //        newInterval = false;
+    //    }
+    //    else if (Time.time < IntervalMid)
+    //    {
+    //        Matrix4x4 WM = tn.WSM.Step(true, WindVector);
+    //        foreach(TreeNodePrimitive tnp in tn.PrimitiveList)
+    //        {
+    //            tnp.LoadShaderMatrix(WM);
+    //        }
+    //    }
+    //    else if (Time.time >= IntervalMid && Time.time < IntervalEnd)
+    //    {
+    //        Matrix4x4 WM = tn.WSM.Step(false, WindVector);
+    //        foreach (TreeNodePrimitive tnp in tn.PrimitiveList)
+    //        {
+    //            tnp.LoadShaderMatrix(WM);
+    //        }
+    //    }
+    //    else if (Time.time >= IntervalEnd)
+    //    {
+    //        newInterval = true;
+    //    }
+    //}
+
+    // New Version
     public void GustUpdate(TreeNode tn)
     {
-        if (Time.time >= IntervalEnd)
+        if (newInterval)
         {
             InitializeInterval();
-            tn.WSM.InitializeStepping(WindVector, IntervalEnd);
+            // Calculate Gust MAX_R for this gust interval
+
+            newInterval = false;
         }
         else if (Time.time < IntervalMid)
         {
-            Matrix4x4 WM = tn.WSM.Step(true, WindVector);
-            foreach(TreeNodePrimitive tnp in tn.PrimitiveList)
-            {
-                tnp.LoadShaderMatrix(WM);
-            }
+            // Rotate in "wind direction" unless it hits Gust MAX_R, then rebound slightly
         }
         else if (Time.time >= IntervalMid && Time.time < IntervalEnd)
         {
-            Matrix4x4 WM = tn.WSM.Step(false, WindVector);
-            foreach (TreeNodePrimitive tnp in tn.PrimitiveList)
-            {
-                tnp.LoadShaderMatrix(WM);
-            }
+            // Reverse rotation direction so that it goes back to initial
+        }
+        else if (Time.time >= IntervalEnd)
+        {
+            // Ensure completely reset
+            // Start new interval
+            newInterval = true;
         }
     }
 
     public void InitializeInterval()
     {
-        IntervalEnd = Time.time + GustInterval + (Random.Range(-1.0f, 1.0f) * Variance);
+        // Uses variance
+        //IntervalEnd = Time.time + GustInterval + (Random.Range(-1.0f, 1.0f) * Variance);
+
+        IntervalEnd = Time.time + GustInterval;
         Debug.Log("Current Time: " + Time.time);
         Debug.Log("Current Gust Interval End: " + IntervalEnd);
         IntervalMid = IntervalEnd / 2;

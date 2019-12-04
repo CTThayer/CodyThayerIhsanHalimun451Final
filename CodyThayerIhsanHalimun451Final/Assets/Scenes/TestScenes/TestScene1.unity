@@ -493,7 +493,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WindVector: {x: 1, y: 0, z: 0}
   Rc: 0
-  GustInterval: 0
+  GustInterval: 5
   Variance: 0
 --- !u!114 &1627454864
 MonoBehaviour:

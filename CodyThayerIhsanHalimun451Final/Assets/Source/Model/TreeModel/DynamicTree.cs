@@ -25,26 +25,20 @@ public class DynamicTree : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // TODO: Handle manipulator input and changes
-
-        
-        
-
+        // Debugging Version:
         Matrix4x4 i = Matrix4x4.identity;
-
-        // TODO: We could possibly optimize this now. Since xforms are stored, this only really needs to be run when nodes are manipulated.
         root.CompositeXform(ref i);
-
-        // TODO: Implement and test the transform matrices being run
-        
-        // DirectLoadShader passes the transform matrix without applying wind
-        //   i.e. passes the identity matrix to LoadShaderMatrix() which 
-        //   effectively only applies the stored TRS.
+        //// DirectLoadShader passes the transform matrix without applying wind
+        ////   i.e. passes the identity matrix to LoadShaderMatrix() which 
+        ////   effectively only applies the stored TRS.
         root.DirectLoadShader();
 
-        // TODO: Add if/else to check if the WindModel is running and if not, run only the TreeNode transforms/shader loading
+        //// TODO: Add if/else to check if the WindModel is running and if not, run only the TreeNode transforms/shader loading
 
-        // This runs the Wind Model updates and applies wind to tree
+        // Wind Model Version
+        //Matrix4x4 i = Matrix4x4.identity;
+        //root.CompositeXform(ref i); // TODO: We could possibly optimize this now. Since xforms are stored, this only really needs to be run when nodes are manipulated.
+        //// This runs the Wind Model updates and applies wind to tree
         //windModel.WindUpdate(root);
 
     }

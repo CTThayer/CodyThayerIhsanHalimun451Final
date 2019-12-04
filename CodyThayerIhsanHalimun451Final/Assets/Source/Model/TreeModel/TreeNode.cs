@@ -98,6 +98,7 @@ public class TreeNode : MonoBehaviour
         }
     }
 
+    // For Debugging
     public void DirectLoadShader()
     {
         foreach (TreeNodePrimitive p in PrimitiveList)
@@ -115,19 +116,21 @@ public class TreeNode : MonoBehaviour
         }
     }
 
-    /************************* CalculateWindRotation ***********************//**
-     *   Calculates the maximum effect of the supplied wind vector at this node.
-     *   This should be run at the BEGINNING of each gust interval.
-     *   
-     *       @param     windVector      Vector3 representing the wind direction
-     *                                  and wind strength (magnitude of vector).
-     *                             
-     **************************************************************************/
-    public Quaternion CalculateGustMaxima(Vector3 windVector)
-    {
-        GustMaximum = this.PrimitiveList[0].GetMaxGustRotationOnNode(windVector, MAX_Rotation);
-        return GustMaximum;
-    }
+
+    //TODO: CUT THIS FUNCTION - WindSimNode now calculates this directly
+    ///************************* CalculateWindRotation ***********************//**
+    // *   Calculates the maximum effect of the supplied wind vector at this node.
+    // *   This should be run at the BEGINNING of each gust interval.
+    // *   
+    // *       @param     windVector      Vector3 representing the wind direction
+    // *                                  and wind strength (magnitude of vector).
+    // *                             
+    // **************************************************************************/
+    //public Quaternion CalculateGustMaxima(Vector3 windVector)
+    //{
+    //    GustMaximum = this.PrimitiveList[0].GetMaxGustRotationOnNode(windVector, MAX_Rotation);
+    //    return GustMaximum;
+    //}
 
     /************************ Tree Node Configuration *************************/
     /*                                                                        */
