@@ -23,9 +23,6 @@ public class TreeNode : MonoBehaviour
 
     private Quaternion GustMaximum; // Stores the maximum rotation for this gust interval
 
-
-    // TODO: Add code to support selection based on primitive(s) collider(s)
-
     // Use this for initialization
     protected void Start()
     {
@@ -40,12 +37,14 @@ public class TreeNode : MonoBehaviour
         mCombinedParentXform = Matrix4x4.identity;
     }
 
-
+    /**************************** Add/Delete Node **************************//**
+     *   AddTreeNode() adds a new TreeNode "inline" in front of the selected
+     *   TreeNode.
+     *   DeleteTreeNode() Deletes the selected TreeNode and re-parents its
+     *   children to the TreeNode preceding this node.
+     **************************************************************************/
     public void AddTreeNode()
     {
-        // TODO: Likely needs logic to control how the node is added 
-        // (i.e. add node inline on branch OR create new branch off of node)
-
         GameObject NewSN = new GameObject();
         Instantiate(NewSN);
         NewSN.AddComponent<TreeNode>();
@@ -64,11 +63,9 @@ public class TreeNode : MonoBehaviour
         }
         Destroy(g);
     }
-    /***************************** Xform Matrix *******************************/
-    /*                                                                        */
 
     /**************************** CompositeXform ***************************//**
-     *   Called by World (or maybe Tree) in UPDATE to pass transform info before
+     *   Called by World (or maybe Tree) in Update to pass transform info before
      *   wind forces are calculated and applied. This is so that primitives are
      *   translated, scaled, and rotated before the wind calculation is made.
      *   
@@ -87,10 +84,10 @@ public class TreeNode : MonoBehaviour
         // propagate to children
         foreach (Transform child in transform)
         {
-            SceneNode cn = child.GetComponent<SceneNode>();
-            if (cn != null)
+            TreeNode tn = child.GetComponent<TreeNode>();
+            if (tn != null)
             {
-                cn.CompositeXform(ref mCombinedParentXform);
+                tn.CompositeXform(ref mCombinedParentXform);
             }
         }
 
@@ -98,22 +95,25 @@ public class TreeNode : MonoBehaviour
         foreach (TreeNodePrimitive p in PrimitiveList)
         {
             p.SetTransformMatrix(ref mCombinedParentXform);
-            //LoadShaderMatrix() is now called after Wind Calculations
         }
     }
 
-    /*                                                                        */
-    /*************************** END Xform Matrix *****************************/
-
-
-
-    /**************************** Wind Simulation *****************************/
-    /*                                                                        */
-
-    // TODO: Need a method for applying the Wind Model formula at this node
-
-    // TODO: Should this go in WindModel and TreeNode just calls it by passing
-    // the current node to the WindModel??
+    public void DirectLoadShader()
+    {
+        foreach (TreeNodePrimitive p in PrimitiveList)
+        {
+            if (p != null)
+                p.LoadShaderMatrix(Matrix4x4.identity);
+        }
+        foreach (Transform child in transform)
+        {
+            TreeNode tn = child.GetComponent<TreeNode>();
+            if (tn != null)
+            {
+                tn.DirectLoadShader();
+            }
+        }
+    }
 
     /************************* CalculateWindRotation ***********************//**
      *   Calculates the maximum effect of the supplied wind vector at this node.
@@ -128,13 +128,6 @@ public class TreeNode : MonoBehaviour
         GustMaximum = this.PrimitiveList[0].GetMaxGustRotationOnNode(windVector, MAX_Rotation);
         return GustMaximum;
     }
-    
-    /*                                                                        */
-    /************************** END Wind Simulation ***************************/
-
-
-
-
 
     /************************ Tree Node Configuration *************************/
     /*                                                                        */

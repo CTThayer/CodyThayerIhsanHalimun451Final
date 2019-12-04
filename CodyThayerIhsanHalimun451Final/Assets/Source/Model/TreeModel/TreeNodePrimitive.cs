@@ -54,17 +54,19 @@ public class TreeNodePrimitive : MonoBehaviour
         Matrix4x4 updatedMatrix = TRS_matrix * M;
         GetComponent<Renderer>().material.SetMatrix("MyXformMat", updatedMatrix);
         GetComponent<Renderer>().material.SetColor("MyColor", MyColor);
+
+        // Moves Collider to match primitive
         Transform selectedCC = transform.GetChild(0);
         selectedCC.position = TRS_matrix.GetColumn(3);
         selectedCC.rotation = TRS_matrix.rotation;
         selectedCC.localScale = TRS_matrix.lossyScale;
     }
     //Original
-    public void LoadShaderMatrix()
-    {
-        GetComponent<Renderer>().material.SetMatrix("MyXformMat", TRS_matrix);
-        GetComponent<Renderer>().material.SetColor("MyColor", MyColor);
-    }
+    //public void LoadShaderMatrix()
+    //{
+    //    GetComponent<Renderer>().material.SetMatrix("MyXformMat", TRS_matrix);
+    //    GetComponent<Renderer>().material.SetColor("MyColor", MyColor);
+    //}
 
 
     /************************** Wind System Support ***************************/

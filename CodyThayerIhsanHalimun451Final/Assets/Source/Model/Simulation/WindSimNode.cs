@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class WindSimNode : MonoBehaviour
 {
-    TreeNode treeNode;
-    TreeNodePrimitive primitive;
+    public TreeNode treeNode;
+    public TreeNodePrimitive primitive;
 
     private float StepRotation = 0;
-    private Vector3 RotationAxis;   // Unnecessary?
-    private float currentRotation;  // Unnecessary?
+    //private Vector3 RotationAxis;   // Unnecessary?
 
     void Start()
     {
@@ -23,12 +22,11 @@ public class WindSimNode : MonoBehaviour
         Quaternion intervaMaxR = treeNode.CalculateGustMaxima(WindVector);
         float steps = (end - Time.time) / Time.deltaTime;
         float theta;
+        Vector3 RotationAxis;
         intervaMaxR.ToAngleAxis(out theta, out RotationAxis);
         StepRotation = theta / steps;
     }
 
-    //TODO: DOES THIS WORK???
-    // WIP Code
     public Matrix4x4 Step(bool forward, Vector3 WindVector)
     {
         Quaternion Q = CalculateStepRotation(forward, WindVector);
@@ -79,21 +77,21 @@ public class WindSimNode : MonoBehaviour
         return Q;
     }
 
-        /*********************** GetMaxGustRotationOnNode **********************//**
-        *   Public method used calculate the maximum rotation that the supplied
-        *   wind vector can cause. Uses ClampWindRotation() to ensure that the
-        *   TreeNodePrimitive doesn't rotate more than the specified MAX_Rotation.
-        *   
-        *       @param     windVector  Vector3 representing the wind direction and
-        *                              magnitude. This should be supplied by the 
-        *                              TreeNode that owns this primitive.
-        *       @param     MAX_R       float representing the maximum rotation this
-        *                              node can apply. This is based on the wind
-        *                              model's calculations and supplied by the
-        *                              TreeNode that owns this primitive.
-        *                             
-        **************************************************************************/
-        public Quaternion GetMaxGustRotationOnNode(Vector3 windVector, float MAX_R)
+    /*********************** GetMaxGustRotationOnNode **********************//**
+    *   Public method used calculate the maximum rotation that the supplied
+    *   wind vector can cause. Uses ClampWindRotation() to ensure that the
+    *   TreeNodePrimitive doesn't rotate more than the specified MAX_Rotation.
+    *   
+    *       @param     windVector  Vector3 representing the wind direction and
+    *                              magnitude. This should be supplied by the 
+    *                              TreeNode that owns this primitive.
+    *       @param     MAX_R       float representing the maximum rotation this
+    *                              node can apply. This is based on the wind
+    *                              model's calculations and supplied by the
+    *                              TreeNode that owns this primitive.
+    *                             
+    **************************************************************************/
+    public Quaternion GetMaxGustRotationOnNode(Vector3 windVector, float MAX_R)
     {
         // TODO: TEST ALL OF THIS!!!
         Quaternion origR = primitive.transform.rotation;                            // Store original rotation

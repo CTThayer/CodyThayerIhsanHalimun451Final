@@ -5,13 +5,14 @@ using UnityEngine;
 public class WindModel : MonoBehaviour
 {
     public Vector3 WindVector;  // Direction and Magnitude of the wind
+    private bool isRunning;     // bool for tracking if simulation is running
+
     public float Rc;            // Rigidity Coefficient for the whole tree
     public float GustInterval;  // Gust Interval: timeframe for "current gust"
     public float Variance;      // Influence coefficient of randomization
-
     private const float Pc = 0.613f;    // "Standard constant" for wind pressure
                                         //  calculations in Newtons/m^2
-    private bool isRunning;     // bool for tracking if simulation is running
+
 
     public bool GetSimulationStatus()
     {
@@ -35,12 +36,6 @@ public class WindModel : MonoBehaviour
     // disable it will likely cause strange issues and/or have performance
     // impacts.
 
-
-    // TODO: Wind Gust Update Loop
-    // TODO: This logic should go in the controller or in the Tree itself. 
-    // The node should simply handle storing its local data and calculating
-    // its movements
-
     //Gust Controller variables
     private float IntervalEnd = 0;
     private float IntervalMid = 0;  // Unnecessary?
@@ -57,7 +52,6 @@ public class WindModel : MonoBehaviour
             }
         }
     }
-
 
     public void GustUpdate(TreeNode tn)
     {
@@ -86,18 +80,11 @@ public class WindModel : MonoBehaviour
 
     public void InitializeInterval()
     {
-        IntervalEnd = GetNextGustEndTime();
+        IntervalEnd = Time.time + GustInterval + (Random.Range(-1.0f, 1.0f) * Variance);
+        Debug.Log("Current Time: " + Time.time);
+        Debug.Log("Current Gust Interval End: " + IntervalEnd);
         IntervalMid = IntervalEnd / 2;
     }
-
-    private float GetNextGustEndTime()
-    {
-        float t = Time.time + GustInterval + (Random.Range(-1.0f, 1.0f) * Variance);
-        Debug.Log("Current Time: " + Time.time);
-        Debug.Log("Current Gust Interval: " + t);
-        return t;
-    }
-
 
 
     /************************** GetWindLoadOnTree **************************//**
