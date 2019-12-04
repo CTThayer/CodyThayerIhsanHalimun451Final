@@ -27,9 +27,9 @@ public class NodePrimitive : MonoBehaviour {
         GetComponent<Renderer>().material.SetColor("MyColor", MyColor);
 
         Transform selectedCC = transform.GetChild(0);
-        selectedCC.position = TRS_matrix.GetColumn(3);
+       // selectedCC.localScale = TRS_matrix.lossyScale;
         selectedCC.rotation = TRS_matrix.rotation;
-        //selectedCC.localScale = TRS_matrix.lossyScale;
+        selectedCC.position = TRS_matrix.GetColumn(3);
     }
 
     public Vector3 GetNodePrimitiveScale()
