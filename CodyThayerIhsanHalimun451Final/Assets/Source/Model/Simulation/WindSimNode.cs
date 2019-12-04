@@ -7,8 +7,13 @@ public class WindSimNode : MonoBehaviour
     public TreeNode treeNode;
     public TreeNodePrimitive primitive;
 
-    private float StepRotation = 0;
+    private float Gust_MaxTheta = 30;       // Max Rotation in Degrees for this gust
+    private float CurrentTheta = 0;
+    private float ThetaPerStep = 0; // Unnecessary?
+
     //private Vector3 RotationAxis;   // Unnecessary?
+
+    private Quaternion OriginalRotation;
 
     void Start()
     {
@@ -17,78 +22,120 @@ public class WindSimNode : MonoBehaviour
         Debug.Assert(primitive != null);
     }
 
-    public void InitializeStepping(Vector3 WindVector, float end)
+    public void StoreOriginalRotation(Quaternion Q)
     {
-        //Quaternion intervalMaxR = treeNode.CalculateGustMaxima(WindVector);
-
-        Quaternion intervalMaxR = GetMaxGustRotationOnNode(WindVector, treeNode.MAX_Rotation);
-        float steps = (end - Time.time) / Time.deltaTime;
-        float theta;
-        Vector3 RotationAxis;
-        intervalMaxR.ToAngleAxis(out theta, out RotationAxis);
-        StepRotation = theta / steps;
+        OriginalRotation = Q;
     }
 
-    public Matrix4x4 Step(bool forward, Vector3 WindVector)
+    public Quaternion GetOriginalRotation()
     {
-        Quaternion Q = CalculateStepRotation(forward, WindVector);
-        return GetWindMatrix(Q);
+        return OriginalRotation;
     }
 
-    //TODO: DOES THIS WORK???
-    // WIP Code
-    private Quaternion CalculateStepRotation(bool forward, Vector3 WindVector)
+    public void InitilializeThetaPerStep(float steps)
     {
-        // Attempt 2 - Uses code from below (reformatted)
+        ThetaPerStep = Gust_MaxTheta / (steps / 2);
+    }
 
-        // Store original rotation
-        Quaternion origR = primitive.transform.rotation;
-
-        // Get a quaternion from the xform matrix
-        Quaternion R = primitive.TRS_matrix.rotation;
-
-        // Set prim's xform rotation to R. Has to be rotation NOT localRotation 
-        // because this is from the composite xform matrix
-        primitive.transform.rotation = R;
-
-        // Combine wind vector and prim's up (up after rotation)
-        Vector3 VplusW = primitive.transform.up + WindVector;
-
-        // Get rotation between tranformed prim's up and the normalized combined vector VPlusW
-        Quaternion Q = Quaternion.FromToRotation(transform.up, VplusW.normalized);
-
-        // Reset primitive's xform so that other code still functions correctly
-        primitive.transform.rotation = origR;
-
-        // Getting axis from wind vector rotation Q
-        float t;
-        Vector3 axis;
-        Q.ToAngleAxis(out t, out axis);
-
-        // Getting angle theta from current rotation R
-        float theta;
-        Vector3 a;
-        R.ToAngleAxis(out theta, out a);
-
-        // If forward, add step, else subtract step
-        theta += forward ? StepRotation : -StepRotation;
-        Q = Quaternion.AngleAxis(theta, axis);
-
-        // Clamp and return
-        Q = ClampWindRotation(Q, treeNode.MAX_Rotation);
-        return Q;
-
+    public Quaternion GetStepRotation(Vector3 WindVector, bool forward)
+    {
+        Vector3 axis = GetWindRotationAxis(WindVector);
+        float theta = GetNextTheta(forward);
+        CurrentTheta += theta;
+        return Quaternion.AngleAxis(CurrentTheta, axis);
     }
 
     private Vector3 GetWindRotationAxis(Vector3 WindVector)
     {
-        Vector3 UP = primitive.GetNodeUpVector();           // Do we need to account for WindMatrix Transform here???
-        
+        Vector3 up = primitive.GetNodeUpVector();
+
         // Cross Product to get the axis of rotation
-        Vector3 Axis = Vector3.Cross(UP, WindVector);       // This might be backwards
+        Vector3 Axis = Vector3.Cross(up, WindVector);       // This might be backwards
         return Axis.normalized;
     }
-    
+
+    // Naive clamping - room for lots of improvements
+    private float GetNextTheta(bool forward)
+    {
+        if (forward)
+        {
+            if (CurrentTheta + ThetaPerStep <= Gust_MaxTheta)
+                return ThetaPerStep;
+            else
+                return Gust_MaxTheta - CurrentTheta;
+        }
+        else
+        {
+            return -ThetaPerStep;
+        }
+    }
+
+
+    //public void InitializeStepping(Vector3 WindVector, float end)
+    //{
+    //    //Quaternion intervalMaxR = treeNode.CalculateGustMaxima(WindVector);
+
+    //    Quaternion intervalMaxR = GetMaxGustRotationOnNode(WindVector, treeNode.MAX_Rotation);
+    //    float steps = (end - Time.time) / Time.deltaTime;
+    //    float theta;
+    //    Vector3 RotationAxis;
+    //    intervalMaxR.ToAngleAxis(out theta, out RotationAxis);
+    //    StepRotation = theta / steps;
+    //}
+
+    //public Matrix4x4 Step(bool forward, Vector3 WindVector)
+    //{
+    //    Quaternion Q = CalculateStepRotation(forward, WindVector);
+    //    return GetWindMatrix(Q);
+    //}
+
+    ////TODO: DOES THIS WORK???
+    //// WIP Code
+    //private Quaternion CalculateStepRotation(bool forward, Vector3 WindVector)
+    //{
+    //    // Attempt 2 - Uses code from below (reformatted)
+
+    //    // Store original rotation
+    //    Quaternion origR = primitive.transform.rotation;
+
+    //    // Get a quaternion from the xform matrix
+    //    Quaternion R = primitive.TRS_matrix.rotation;
+
+    //    // Set prim's xform rotation to R. Has to be rotation NOT localRotation 
+    //    // because this is from the composite xform matrix
+    //    primitive.transform.rotation = R;
+
+    //    // Combine wind vector and prim's up (up after rotation)
+    //    Vector3 VplusW = primitive.transform.up + WindVector;
+
+    //    // Get rotation between tranformed prim's up and the normalized combined vector VPlusW
+    //    Quaternion Q = Quaternion.FromToRotation(transform.up, VplusW.normalized);
+
+    //    // Reset primitive's xform so that other code still functions correctly
+    //    primitive.transform.rotation = origR;
+
+    //    // Getting axis from wind vector rotation Q
+    //    float t;
+    //    Vector3 axis;
+    //    Q.ToAngleAxis(out t, out axis);
+
+    //    // Getting angle theta from current rotation R
+    //    float theta;
+    //    Vector3 a;
+    //    R.ToAngleAxis(out theta, out a);
+
+    //    // If forward, add step, else subtract step
+    //    theta += forward ? StepRotation : -StepRotation;
+    //    Q = Quaternion.AngleAxis(theta, axis);
+
+    //    // Clamp and return
+    //    Q = ClampWindRotation(Q, treeNode.MAX_Rotation);
+    //    return Q;
+
+    //}
+
+
+
     // Returns max rotation in degrees
     //private float GetMaxGustRotation(Vector3 WindVector, float intervalLength)
     //{
@@ -114,18 +161,18 @@ public class WindSimNode : MonoBehaviour
     *                              TreeNode that owns this primitive.
     *                             
     **************************************************************************/
-    public Quaternion GetMaxGustRotationOnNode(Vector3 windVector, float MAX_R)
-    {
-        // TODO: TEST ALL OF THIS!!!
-        Quaternion origR = primitive.transform.rotation;                            // Store original rotation
-        Quaternion R = primitive.TRS_matrix.rotation;                               // Get a quaternion from the xform matrix
-        primitive.transform.rotation = R;                                           // Set prim's xform rotation to R. Has to be rotation NOT localRotation because this is from the composite xform matrix
-        Vector3 VplusW = primitive.transform.up + windVector;                       // Combine wind vector and prim's up (up after rotation)
-        Quaternion Q = Quaternion.FromToRotation(transform.up, VplusW.normalized);  // Get rotation between tranformed prim's up and the normalized combined vector VPlusW
-        Q = ClampWindRotation(Q, MAX_R);                                            // Clamps the rotation to be less than or equal to MAX_R degrees
-        primitive.transform.rotation = origR;                                       // Reset primitive's xform so that other code still functions correctly
-        return Q;
-    }
+    //public Quaternion GetMaxGustRotationOnNode(Vector3 windVector, float MAX_R)
+    //{
+    //    // TODO: TEST ALL OF THIS!!!
+    //    Quaternion origR = primitive.transform.rotation;                            // Store original rotation
+    //    Quaternion R = primitive.TRS_matrix.rotation;                               // Get a quaternion from the xform matrix
+    //    primitive.transform.rotation = R;                                           // Set prim's xform rotation to R. Has to be rotation NOT localRotation because this is from the composite xform matrix
+    //    Vector3 VplusW = primitive.transform.up + windVector;                       // Combine wind vector and prim's up (up after rotation)
+    //    Quaternion Q = Quaternion.FromToRotation(transform.up, VplusW.normalized);  // Get rotation between tranformed prim's up and the normalized combined vector VPlusW
+    //    Q = ClampWindRotation(Q, MAX_R);                                            // Clamps the rotation to be less than or equal to MAX_R degrees
+    //    primitive.transform.rotation = origR;                                       // Reset primitive's xform so that other code still functions correctly
+    //    return Q;
+    //}
 
     /************************** ClampWindRotation **************************//**
     *   Private utility method for clamping the rotation to a specified number
@@ -142,16 +189,16 @@ public class WindSimNode : MonoBehaviour
     *                             
     **************************************************************************/
     // TODO: Should this clamp to negative MAX_R in addition to positive MAX_R?
-    private Quaternion ClampWindRotation(Quaternion Q, float MAX_R)
-    {
-        float theta;
-        Vector3 axis;
-        Q.ToAngleAxis(out theta, out axis);
-        if (theta <= MAX_R)
-            return Q;
-        else
-            return Quaternion.AngleAxis(MAX_R, axis);
-    }
+    //private Quaternion ClampWindRotation(Quaternion Q, float MAX_R)
+    //{
+    //    float theta;
+    //    Vector3 axis;
+    //    Q.ToAngleAxis(out theta, out axis);
+    //    if (theta <= MAX_R)
+    //        return Q;
+    //    else
+    //        return Quaternion.AngleAxis(MAX_R, axis);
+    //}
 
 
     /**************************** GetWindMatrix ****************************//**
@@ -164,13 +211,13 @@ public class WindSimNode : MonoBehaviour
     *       @param      Q       Quaternion representing the correct rotation
     *                             
     **************************************************************************/
-    private Matrix4x4 GetWindMatrix(Quaternion Q)
-    {
-        Matrix4x4 p = Matrix4x4.TRS(primitive.Pivot, Quaternion.identity, Vector3.one);
-        Matrix4x4 invp = Matrix4x4.TRS(-primitive.Pivot, Quaternion.identity, Vector3.one);
-        Matrix4x4 trs = Matrix4x4.TRS(Vector3.zero, Q, Vector3.one);                // TODO: Does this need to be Vector3.one for T param??
-        return p * trs * invp;
-    }
+    //private Matrix4x4 GetWindMatrix(Quaternion Q)
+    //{
+    //    Matrix4x4 p = Matrix4x4.TRS(primitive.Pivot, Quaternion.identity, Vector3.one);
+    //    Matrix4x4 invp = Matrix4x4.TRS(-primitive.Pivot, Quaternion.identity, Vector3.one);
+    //    Matrix4x4 trs = Matrix4x4.TRS(Vector3.zero, Q, Vector3.one);                // TODO: Does this need to be Vector3.one for T param??
+    //    return p * trs * invp;
+    //}
 
 
 

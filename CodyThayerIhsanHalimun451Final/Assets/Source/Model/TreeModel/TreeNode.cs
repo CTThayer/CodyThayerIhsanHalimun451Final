@@ -16,7 +16,7 @@ public class TreeNode : MonoBehaviour
      **************************************************************************/
     // TODO: These are set to public for in-Unity testing purposes. We may want 
     // to set them back to private once everything is complete.
-    public WindSimNode WSM;
+    public WindSimNode WSN;
     public float Rn;               // Node rigidity
     public float Wn;               // Wind load at this node
     public float MAX_Rotation;     // Maximum amount this node can rotate in Deg
@@ -94,43 +94,30 @@ public class TreeNode : MonoBehaviour
         // disenminate to primitives
         foreach (TreeNodePrimitive p in PrimitiveList)
         {
-            p.SetTransformMatrix(ref mCombinedParentXform);
+            //p.SetTransformMatrix(ref mCombinedParentXform);
+            p.LoadShaderMatrix(ref mCombinedParentXform);
         }
     }
 
-    // For Debugging
-    public void DirectLoadShader()
-    {
-        foreach (TreeNodePrimitive p in PrimitiveList)
-        {
-            if (p != null)
-                p.LoadShaderMatrix(Matrix4x4.identity);
-        }
-        foreach (Transform child in transform)
-        {
-            TreeNode tn = child.GetComponent<TreeNode>();
-            if (tn != null)
-            {
-                tn.DirectLoadShader();
-            }
-        }
-    }
-
-
-    //TODO: CUT THIS FUNCTION - WindSimNode now calculates this directly
-    ///************************* CalculateWindRotation ***********************//**
-    // *   Calculates the maximum effect of the supplied wind vector at this node.
-    // *   This should be run at the BEGINNING of each gust interval.
-    // *   
-    // *       @param     windVector      Vector3 representing the wind direction
-    // *                                  and wind strength (magnitude of vector).
-    // *                             
-    // **************************************************************************/
-    //public Quaternion CalculateGustMaxima(Vector3 windVector)
+    //// For Debugging
+    //public void DirectLoadShader()
     //{
-    //    GustMaximum = this.PrimitiveList[0].GetMaxGustRotationOnNode(windVector, MAX_Rotation);
-    //    return GustMaximum;
+
+    //    foreach (Transform child in transform)
+    //    {
+    //        TreeNode tn = child.GetComponent<TreeNode>();
+    //        if (tn != null)
+    //        {
+    //            tn.DirectLoadShader();
+    //            foreach (TreeNodePrimitive p in PrimitiveList)
+    //            {
+    //                if (p != null)
+    //                    p.LoadShaderMatrix(Matrix4x4.identity);
+    //            }
+    //        }
+    //    }
     //}
+
 
     /************************ Tree Node Configuration *************************/
     /*                                                                        */

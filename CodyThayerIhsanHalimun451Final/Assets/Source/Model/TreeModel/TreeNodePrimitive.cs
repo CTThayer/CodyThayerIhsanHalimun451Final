@@ -49,24 +49,34 @@ public class TreeNodePrimitive : MonoBehaviour
     **************************************************************************/
     //New - Applies outside transform matrix M to the TRS_matrix before it is
     //      sent to the shader.
-    public void LoadShaderMatrix(Matrix4x4 M)
+    //public void LoadShaderMatrix(Matrix4x4 M)
+    //{
+    //    Matrix4x4 updatedMatrix = TRS_matrix;// * M;
+    //    GetComponent<Renderer>().material.SetMatrix("MyXformMat", updatedMatrix);
+    //    GetComponent<Renderer>().material.SetColor("MyColor", MyColor);
+
+    //    // Moves Collider to match primitive
+    //    Transform selectedCC = transform.GetChild(0);
+    //    selectedCC.position = TRS_matrix.GetColumn(3);
+    //    selectedCC.rotation = TRS_matrix.rotation;
+    //    selectedCC.localScale = TRS_matrix.lossyScale;
+    //}
+    
+    //Original
+    public void LoadShaderMatrix(ref Matrix4x4 nodeMatrix)
     {
-        Matrix4x4 updatedMatrix = TRS_matrix * M;
-        GetComponent<Renderer>().material.SetMatrix("MyXformMat", updatedMatrix);
+        Matrix4x4 p = Matrix4x4.TRS(Pivot, Quaternion.identity, Vector3.one);
+        Matrix4x4 invp = Matrix4x4.TRS(-Pivot, Quaternion.identity, Vector3.one);
+        Matrix4x4 trs = Matrix4x4.TRS(transform.localPosition, transform.localRotation, transform.localScale);
+        TRS_matrix = nodeMatrix * p * trs * invp;
+        GetComponent<Renderer>().material.SetMatrix("MyXformMat", TRS_matrix);
         GetComponent<Renderer>().material.SetColor("MyColor", MyColor);
 
-        // Moves Collider to match primitive
         Transform selectedCC = transform.GetChild(0);
         selectedCC.position = TRS_matrix.GetColumn(3);
         selectedCC.rotation = TRS_matrix.rotation;
         selectedCC.localScale = TRS_matrix.lossyScale;
     }
-    //Original
-    //public void LoadShaderMatrix()
-    //{
-    //    GetComponent<Renderer>().material.SetMatrix("MyXformMat", TRS_matrix);
-    //    GetComponent<Renderer>().material.SetColor("MyColor", MyColor);
-    //}
 
 
     public Vector3 GetNodeUpVector()
