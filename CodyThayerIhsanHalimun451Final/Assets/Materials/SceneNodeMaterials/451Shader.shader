@@ -34,16 +34,16 @@
 			v2f MyVert (appdata v)
 			{
 				v2f o;
-                
-                // Can use one of the followings:
-                // o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);  // Camera + GameObject transform TRS
 
-                o.vertex = mul(MyXformMat, v.vertex);  // use our own transform matrix!
-                    // MUST apply before camrea!
+				// Can use one of the followings:
+				// o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);  // Camera + GameObject transform TRS
 
-                o.vertex = mul(UNITY_MATRIX_VP, o.vertex);   // camera transform only                
-				
-                return o;
+				o.vertex = mul(MyXformMat, v.vertex);  // use our own transform matrix!
+					// MUST apply before camrea!
+
+				o.vertex = mul(UNITY_MATRIX_VP, o.vertex);   // camera transform only                
+
+				return o;
 			}
 			
 			fixed4 MyFrag (v2f i) : SV_Target
