@@ -6,7 +6,7 @@ public class DynamicTree : MonoBehaviour
 {
 
     public TreeNode root;           // Root TreeNode of the tree's hierarchy
-    public WindModel windModel;     // WindModel associated with this tree
+    //public WindModel windModel;     // WindModel associated with this tree
 
     //public int branchSubdivs;       // Subdivs of branch circumference
     //public List<Mesh> branches;     // Contains a mesh for each branch
@@ -19,7 +19,7 @@ public class DynamicTree : MonoBehaviour
         // TODO: Initialize tree nodes
         // TODO: Initialize meshes
 
-        Debug.Assert(windModel != null);
+        //Debug.Assert(windModel != null);
     }
 
     // Update is called once per frame
@@ -39,7 +39,7 @@ public class DynamicTree : MonoBehaviour
         Matrix4x4 i = Matrix4x4.identity;
         root.CompositeXform(ref i); // TODO: We could possibly optimize this now. Since xforms are stored, this only really needs to be run when nodes are manipulated.
         // This runs the Wind Model updates and applies wind to tree
-        windModel.WindUpdate(root);
+        //windModel.WindUpdate(root);
         //root.DirectLoadShader();    // Debug - If possible, remove this and simplify shader execution
 
     }
