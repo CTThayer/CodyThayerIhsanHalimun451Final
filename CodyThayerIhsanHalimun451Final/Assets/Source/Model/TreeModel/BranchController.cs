@@ -96,17 +96,44 @@ public class BranchController : MonoBehaviour
         return bMesh;
     }
 
-    private Vector3[] InitializeVertices(int t)
+    private Vector3[] InitializeVertices(int totalVerts)
     {
-        Vector3[] v = new Vector3[t];
+        Vector3[] verts = new Vector3[totalVerts];
+        float theta = 360.0f / cirSubdivs;
 
+        // Create a ring for each node
+        for (int n = 0; n < branchNodes.Count - 1; ++n)
+        {
+            float r = (branchNodes[n].transform.localScale.x + branchNodes[n].transform.localScale.z) / 2.0f;
+            for (int i = 0; i < cirSubdivs; ++i)
+            {
+                float x = r * Mathf.Cos(theta);
+                float y = 2.0f;
+                float z = r * Mathf.Sin(theta);
 
-        return v;
+                verts[i * n] = new Vector3(x, y, z);
+            }
+        }
+
+        // Handle final point on branch
+        Transform t = branchNodes[branchNodes.Count - 1].transform;
+        Vector3 last = t.up * t.localScale.y * 0.75f;
+        verts[totalVerts] = last;
+
+        return verts;
     }
 
     //private int[] InitializeTriangles(int t)
     //{
+    //    int[] tris = new int[(t * 6) + 1];
 
+    //    for (int r = 0; r < branchNodes.Count - 1; ++r)
+    //    {
+    //        for (int c = 0; c < cirSubdivs - 1; ++c)
+    //        {
+
+    //        }
+    //    }
     //}
 
     //private Vector3[] InitializeNormals(int t)
