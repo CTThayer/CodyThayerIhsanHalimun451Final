@@ -276,7 +276,7 @@ MonoBehaviour:
   NodeOrigin: {x: 0, y: 0, z: 0}
   PrimitiveList:
   - {fileID: 0}
-  WSM: {fileID: 0}
+  WSN: {fileID: 0}
   Rn: 0
   Wn: 0
   MAX_Rotation: 0
@@ -342,7 +342,7 @@ MonoBehaviour:
   PrimitiveList:
   - {fileID: 881357465}
   - {fileID: 1140032637}
-  WSM: {fileID: 0}
+  WSN: {fileID: 0}
   Rn: 0
   Wn: 0
   MAX_Rotation: 0
@@ -1257,7 +1257,7 @@ MonoBehaviour:
   NodeOrigin: {x: 0, y: 2, z: 0}
   PrimitiveList:
   - {fileID: 1857808305}
-  WSM: {fileID: 0}
+  WSN: {fileID: 0}
   Rn: 0
   Wn: 0
   MAX_Rotation: 0
@@ -2188,7 +2188,7 @@ MonoBehaviour:
   NodeOrigin: {x: 0, y: 2, z: 0}
   PrimitiveList:
   - {fileID: 16854903}
-  WSM: {fileID: 0}
+  WSN: {fileID: 0}
   Rn: 0
   Wn: 0
   MAX_Rotation: 0

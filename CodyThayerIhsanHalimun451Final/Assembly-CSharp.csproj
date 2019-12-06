@@ -58,11 +58,14 @@
      <Compile Include="Assets\Materials\SceneNodeMaterials\LoadLight.cs" />
      <Compile Include="Assets\Materials\SceneNodeMaterials\PointLight.cs" />
      <Compile Include="Assets\Source\CameraManipulation.cs" />
+     <Compile Include="Assets\Source\CameraManipulation2.cs" />
      <Compile Include="Assets\Source\Controller\SelectAndMove.cs" />
      <Compile Include="Assets\Source\Model\SceneHierarchySupport\NodePrimitive.cs" />
      <Compile Include="Assets\Source\Model\SceneHierarchySupport\SceneNode.cs" />
      <Compile Include="Assets\Source\Model\Simulation\WindModel.cs" />
      <Compile Include="Assets\Source\Model\Simulation\WindSimNode.cs" />
+     <Compile Include="Assets\Source\Model\Simulation\WindSimWithPrefabs\TestCode\WModel.cs" />
+     <Compile Include="Assets\Source\Model\Simulation\WindSimWithPrefabs\TestCode\WNode.cs" />
      <Compile Include="Assets\Source\Model\Simulation\WindSimWithPrefabs\WindModel_P.cs" />
      <Compile Include="Assets\Source\Model\Simulation\WindSimWithPrefabs\WindNode_P.cs" />
      <Compile Include="Assets\Source\Model\TheWorld.cs" />

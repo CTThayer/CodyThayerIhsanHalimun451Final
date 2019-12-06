@@ -20,12 +20,9 @@ public class SelectAndMove : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
         {
             HandleMouseEvents();
+           
         }
-        if (ControlledObject != null)
-        {
-            Debug.Log(ControlledObject.transform.parent.parent.name);
-            ControlledObject.transform.parent.parent.localRotation = manipulator.transform.localRotation;
-        }
+        
     }
 
         GameObject GetSelection()
@@ -59,7 +56,7 @@ public class SelectAndMove : MonoBehaviour
             {
                 SelectedObject = NewSelection;
                 manipulator.transform.position = SelectedObject.transform.position;
-               // manipulator.transform.rotation = SelectedObject.transform.rotation;
+                manipulator.transform.rotation = SelectedObject.transform.rotation;
             }
             //if (CurrentSelection.transform.parent == manipulator)
 
@@ -92,9 +89,9 @@ public class SelectAndMove : MonoBehaviour
                 Vector3 delta = Input.mousePosition - LastMousePosition;
 
                 rotDelta = Quaternion.ToEulerAngles(manipulator.transform.localRotation).x;
-                rotDelta += delta.x*.02f;
+                rotDelta += delta.x*.2f;
                 manipulator.transform.localRotation = Quaternion.AngleAxis(rotDelta, manipulator.transform.right);
-              //  ControlledObject.transform.parent.localRotation *= manipulator.transform.localRotation;
+                ControlledObject.transform.parent.parent.localRotation *= manipulator.transform.localRotation;
 
                 LastMousePosition = Input.mousePosition;
 
@@ -104,9 +101,9 @@ public class SelectAndMove : MonoBehaviour
                 Vector3 delta = Input.mousePosition - LastMousePosition;
 
                 rotDelta = Quaternion.ToEulerAngles(manipulator.transform.localRotation).y;
-                rotDelta += delta.y * .02f;
+                rotDelta += delta.x * .2f;
                 manipulator.transform.localRotation = Quaternion.AngleAxis(rotDelta, manipulator.transform.up);
-               // ControlledObject.transform.parent.localRotation *= manipulator.transform.localRotation;
+               ControlledObject.transform.parent.parent.localRotation *= manipulator.transform.localRotation;
                 Debug.Log(SelectedObject.transform.parent.name);
                 LastMousePosition = Input.mousePosition;
 
@@ -116,12 +113,17 @@ public class SelectAndMove : MonoBehaviour
                 Vector3 delta = Input.mousePosition - LastMousePosition;
 
                 rotDelta = Quaternion.ToEulerAngles(manipulator.transform.localRotation).z;
-                rotDelta += delta.x * .02f;
+                rotDelta += delta.x * .2f;
                 manipulator.transform.localRotation = Quaternion.AngleAxis(rotDelta, manipulator.transform.forward);
-              //  ControlledObject.transform.parent.localRotation *= manipulator.transform.localRotation;
+               ControlledObject.transform.parent.parent.localRotation *= manipulator.transform.localRotation;
 
                 LastMousePosition = Input.mousePosition;
 
+            }
+            if (ControlledObject != null)
+            {
+                Debug.Log(ControlledObject.transform.parent.parent.name);
+               // ControlledObject.transform.parent.parent.localRotation *= manipulator.transform.localRotation;
             }
         }
     }
