@@ -13,7 +13,7 @@ public class T_World : MonoBehaviour
     }
 
     // Update is called once per frame
-    void LateUpdateUpdate()
+    void Update()
     {
         Matrix4x4 i = Matrix4x4.identity;
         TheRoot.CompositeXform(ref i);

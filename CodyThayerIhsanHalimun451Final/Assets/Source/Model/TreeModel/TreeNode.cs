@@ -31,12 +31,13 @@ public class TreeNode : MonoBehaviour
     void UpdateNodeOrigin()
     {
         Vector3 pScale = Vector3.one;
-        TreeNode Parent = transform.GetComponentInParent<TreeNode>();
-        if (Parent != null)
+        float y = 1;
+        TreeNode parentNode = transform.GetComponentInParent<TreeNode>();
+        if (parentNode != null)
         {
-            pScale = Parent.PrimitiveList[0].transform.localScale;
+            pScale = parentNode.PrimitiveList[0].transform.localScale;
+            y = InitialNodeOrigin.y * pScale.y;
         }
-        float y = InitialNodeOrigin.y * pScale.y;
         NodeOrigin = new Vector3(NodeOrigin.x, y, NodeOrigin.z);
     }
 
