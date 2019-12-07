@@ -59,6 +59,7 @@
      <Compile Include="Assets\Materials\SceneNodeMaterials\PointLight.cs" />
      <Compile Include="Assets\Source\CameraManipulation.cs" />
      <Compile Include="Assets\Source\CameraManipulation2.cs" />
+     <Compile Include="Assets\Source\Controller\ColliderN.cs" />
      <Compile Include="Assets\Source\Controller\SelectAndMove.cs" />
      <Compile Include="Assets\Source\Controller\SelectAndMoveScale.cs" />
      <Compile Include="Assets\Source\Model\SceneHierarchySupport\NodePrimitive.cs" />

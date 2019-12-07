@@ -93,7 +93,7 @@ public class SelectAndMove : MonoBehaviour
                 rotDelta = Quaternion.ToEulerAngles(manipulator.transform.localRotation).x;
                 rotDelta += delta.x*.2f;
                 manipulator.transform.localRotation = Quaternion.AngleAxis(rotDelta, manipulator.transform.right);
-                ControlledObject.transform.parent.parent.localRotation *= manipulator.transform.localRotation;
+                ControlledObject.GetComponent<ColliderN>().TN.transform.localRotation *= manipulator.transform.localRotation;
 
                 LastMousePosition = Input.mousePosition;
 
@@ -105,7 +105,7 @@ public class SelectAndMove : MonoBehaviour
                 rotDelta = Quaternion.ToEulerAngles(manipulator.transform.localRotation).y;
                 rotDelta += delta.x * .2f;
                 manipulator.transform.localRotation = Quaternion.AngleAxis(rotDelta, manipulator.transform.up);
-               ControlledObject.transform.parent.parent.localRotation *= manipulator.transform.localRotation;
+               ControlledObject.GetComponent<ColliderN>().TN.transform.localRotation *= manipulator.transform.localRotation;
                 Debug.Log(SelectedObject.transform.parent.name);
                 LastMousePosition = Input.mousePosition;
 
@@ -117,15 +117,15 @@ public class SelectAndMove : MonoBehaviour
                 rotDelta = Quaternion.ToEulerAngles(manipulator.transform.localRotation).z;
                 rotDelta += delta.x * .2f;
                 manipulator.transform.localRotation = Quaternion.AngleAxis(rotDelta, manipulator.transform.forward);
-               ControlledObject.transform.parent.parent.localRotation *= manipulator.transform.localRotation;
+               ControlledObject.GetComponent<ColliderN>().TN.transform.localRotation *= manipulator.transform.localRotation;
 
                 LastMousePosition = Input.mousePosition;
 
             }
             if (ControlledObject != null)
             {
-                Debug.Log(ControlledObject.transform.parent.parent.name);
-               // ControlledObject.transform.parent.parent.localRotation *= manipulator.transform.localRotation;
+                Debug.Log(ControlledObject.GetComponent<ColliderN>().TN.transform.name);
+               // ControlledObject.GetComponent<ColliderN>().TN.transform.localRotation *= manipulator.transform.localRotation;
             }
         }
     }
