@@ -508,7 +508,7 @@ PrefabInstance:
     - target: {fileID: 6364162316093398604, guid: 2a38585defb05e74baa030be77152355,
         type: 3}
       propertyPath: m_TagString
-      value: Y-Manipulator
+      value: Z-Manipulator
       objectReference: {fileID: 0}
     - target: {fileID: 4748359552480457969, guid: 2a38585defb05e74baa030be77152355,
         type: 3}
@@ -518,7 +518,7 @@ PrefabInstance:
     - target: {fileID: 7368689232608947679, guid: 2a38585defb05e74baa030be77152355,
         type: 3}
       propertyPath: m_TagString
-      value: Z-Manipulator
+      value: Y-Manipulator
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a38585defb05e74baa030be77152355, type: 3}
