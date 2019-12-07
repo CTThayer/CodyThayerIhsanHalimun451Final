@@ -19,8 +19,10 @@ public class SelectAndMove : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
         {
-            HandleMouseEvents();
-           
+            if (!Input.GetKey(KeyCode.A))
+            {
+                HandleMouseEvents();
+            }
         }
         
     }

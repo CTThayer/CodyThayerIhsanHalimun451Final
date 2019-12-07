@@ -8,6 +8,9 @@ TagManager:
   - Z-Manipulator
   - Y-Manipulator
   - mController
+  - X-ManipulatorScale
+  - Y-ManipulatorScale
+  - Z-ManipulatorScale
   layers:
   - Default
   - TransparentFX
