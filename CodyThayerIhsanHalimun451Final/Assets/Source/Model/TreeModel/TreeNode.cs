@@ -6,7 +6,7 @@ public class TreeNode : MonoBehaviour
 {
     protected Matrix4x4 mCombinedParentXform;
     public Vector3 InitialNodeOrigin;
-    private Vector3 NodeOrigin = Vector3.zero;
+    public Vector3 NodeOrigin = Vector3.zero;
     public List<TreeNodePrimitive> PrimitiveList;
 
     // Use this for initialization
@@ -31,16 +31,18 @@ public class TreeNode : MonoBehaviour
     void UpdateNodeOrigin()
     {
         Vector3 pScale = Vector3.one;
-        float y = 1;
-        TreeNode parentNode = transform.GetComponentInParent<TreeNode>();
-        if (parentNode != null)
+        float yN = InitialNodeOrigin.y;
+        if (transform.parent != null)
         {
-            pScale = parentNode.PrimitiveList[0].transform.localScale;
-            y = InitialNodeOrigin.y * pScale.y;
+            TreeNode parentNode = transform.parent.GetComponent<TreeNode>();
+            if (parentNode != null)
+            {
+                pScale = parentNode.PrimitiveList[0].transform.localScale;
+                yN = (pScale.y > 0) ? yN * pScale.y : yN;
+            }
+            NodeOrigin = new Vector3(NodeOrigin.x, yN, NodeOrigin.z);
         }
-        NodeOrigin = new Vector3(NodeOrigin.x, y, NodeOrigin.z);
     }
-
 
     /**************************** CompositeXform ***************************//**
      *   Called by World (or maybe Tree) in Update to pass transform info before
@@ -59,7 +61,7 @@ public class TreeNode : MonoBehaviour
         // Original
         //Matrix4x4 trs = Matrix4x4.TRS(transform.localPosition, transform.localRotation, transform.localScale);
 
-        // New Version - doesn't pass scale (passes Vector3.one) to allow for scaling of onlt the selected node
+        // New Version - doesn't pass scale (passes Vector3.one) to allow for scaling of only the selected node
         Matrix4x4 trs = Matrix4x4.TRS(transform.localPosition, transform.localRotation, Vector3.one);
 
         mCombinedParentXform = parentXform * orgT * trs;
