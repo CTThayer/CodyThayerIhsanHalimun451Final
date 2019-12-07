@@ -54,14 +54,14 @@ public class SelectAndMoveScale : MonoBehaviour
             // New Object Selected
             if (NewSelection != null
                 && NewSelection != SelectedObject
-                && NewSelection.transform.parent != manipulator
+                && NewSelection.transform != manipulator
                 && NewSelection.tag == "mController")
             {
                 SelectedObject = NewSelection;
                 manipulator.transform.position = SelectedObject.transform.position;
                 manipulator.transform.rotation = SelectedObject.transform.rotation;
             }
-            //if (CurrentSelection.transform.parent == manipulator)
+            //if (CurrentSelection.transform == manipulator)
 
             if (NewSelection.tag == "X-Manipulator"
                || NewSelection.tag == "Y-Manipulator"
@@ -85,20 +85,20 @@ public class SelectAndMoveScale : MonoBehaviour
         }
         if (Input.GetMouseButton(0) && SelectedObject != null)
         {
-
+            
                 
                 if (SelectedObject.tag == "X-Manipulator")
                 {
                     Debug.Log("Selected:" + SelectedObject.name);
-                    Debug.Log("Selected:" + ControlledObject.transform.parent.name);
+                    Debug.Log("Selected:" + ControlledObject.GetComponent<ColliderN>().TP.transform.name);
 
                     Vector3 delta = Input.mousePosition - LastMousePosition;
                     Debug.Log("delta:" + delta);
-                    float newX = manipulator.transform.localScale.x + delta.x * .2f; 
+                    float newX = manipulator.transform.localScale.x + delta.x * .1f; 
                     manipulator.transform.localScale = new Vector3(newX, manipulator.transform.localScale.y, manipulator.transform.localScale.z);
 
-                    newX = ControlledObject.transform.parent.parent.localScale.x + delta.x * .2f;
-                    ControlledObject.transform.parent.parent.localScale = new Vector3(newX, ControlledObject.transform.parent.parent.localScale.y, ControlledObject.transform.parent.parent.localScale.z);
+                    newX = ControlledObject.GetComponent<ColliderN>().TP.transform.localScale.x + delta.x * .1f;
+                    ControlledObject.GetComponent<ColliderN>().TP.transform.localScale = new Vector3(newX, ControlledObject.GetComponent<ColliderN>().TP.transform.localScale.y, ControlledObject.GetComponent<ColliderN>().TP.transform.localScale.z);
 
                     LastMousePosition = Input.mousePosition;
 
@@ -107,11 +107,11 @@ public class SelectAndMoveScale : MonoBehaviour
                 {
                 Vector3 delta = Input.mousePosition - LastMousePosition;
 
-                float newY = manipulator.transform.localScale.z + delta.y * .2f;
+                float newY = manipulator.transform.localScale.z + delta.y * .1f;
                 manipulator.transform.localScale = new Vector3(manipulator.transform.localScale.x, newY, manipulator.transform.localScale.z);
 
-                newY = ControlledObject.transform.parent.localScale.z + delta.y * .2f;
-                ControlledObject.transform.parent.localScale = new Vector3(ControlledObject.transform.parent.localScale.x, newY, ControlledObject.transform.parent.localScale.z);
+                newY = ControlledObject.GetComponent<ColliderN>().TP.transform.localScale.z + delta.y * .1f;
+                ControlledObject.GetComponent<ColliderN>().TP.transform.localScale = new Vector3(ControlledObject.GetComponent<ColliderN>().TP.transform.localScale.x, newY, ControlledObject.GetComponent<ColliderN>().TP.transform.localScale.z);
                 LastMousePosition = Input.mousePosition;
 
                 }
@@ -119,20 +119,47 @@ public class SelectAndMoveScale : MonoBehaviour
                 {
                     Vector3 delta = Input.mousePosition - LastMousePosition;
 
-                    float newZ = manipulator.transform.localScale.z + delta.x * .2f;
+                    float newZ = manipulator.transform.localScale.z + delta.x * .1f;
                     manipulator.transform.localScale = new Vector3(manipulator.transform.localScale.x, manipulator.transform.localScale.y, newZ);
 
-                    newZ = ControlledObject.transform.parent.localScale.z + delta.x * .2f;
-                    ControlledObject.transform.parent.localScale = new Vector3(ControlledObject.transform.parent.localScale.x, ControlledObject.transform.parent.localScale.y, newZ);
+                    newZ = ControlledObject.GetComponent<ColliderN>().TP.transform.localScale.z + delta.x * .1f;
+                    ControlledObject.GetComponent<ColliderN>().TP.transform.localScale = new Vector3(ControlledObject.GetComponent<ColliderN>().TP.transform.localScale.x, ControlledObject.GetComponent<ColliderN>().TP.transform.localScale.y, newZ);
 
                     LastMousePosition = Input.mousePosition;
 
                 }
                 if (ControlledObject != null)
                 {
-                    Debug.Log(ControlledObject.transform.parent.name);
+                    Debug.Log(ControlledObject.GetComponent<ColliderN>().TP.transform.name);
                 }
             
+           /* if (SelectedObject.tag == "X-Manipulator")
+            {
+                Vector3 delta = Input.mousePosition - LastMousePosition;
+                float x = ControlledObject.GetComponent<ColliderN>().TP.transform.localScale.x + (delta.x * translateSpeed * Time.deltaTime);
+                ControlledObject.GetComponent<ColliderN>().TP.transform.localScale = new Vector3(x, ControlledObject.GetComponent<ColliderN>().TP.transform.localScale.y, ControlledObject.GetComponent<ColliderN>().TP.transform.localScale.z);
+                GameObject.Find("AxisFrame_XCylinder").transform.localScale = new Vector3(x, manipulator.transform.localScale.y, manipulator.transform.localScale.z);
+                LastMousePosition = Input.mousePosition;
+                Debug.Log("x: " + x);
+            }
+            else if (SelectedObject.tag == "Y-Manipulator")
+            {
+                Vector3 delta = Input.mousePosition - LastMousePosition;
+                float y = ControlledObject.GetComponent<ColliderN>().TP.transform.localScale.y + (delta.y * translateSpeed * Time.deltaTime);
+                ControlledObject.GetComponent<ColliderN>().TP.transform.localScale = new Vector3(ControlledObject.GetComponent<ColliderN>().TP.transform.localScale.x, y, ControlledObject.GetComponent<ColliderN>().TP.transform.localScale.z);
+                GameObject.Find("AxisFrame_YCylinder").transform.localScale = new Vector3(manipulator.transform.localScale.x, y, manipulator.transform.localScale.z);
+                LastMousePosition = Input.mousePosition;
+                Debug.Log("y: " + y);
+            }
+            else if (SelectedObject.tag == "Z-Manipulator")
+            {
+                Vector3 delta = Input.mousePosition - LastMousePosition;
+                float z = ControlledObject.GetComponent<ColliderN>().TP.transform.localScale.x + (delta.x * translateSpeed * Time.deltaTime);
+                ControlledObject.GetComponent<ColliderN>().TP.transform.localScale = new Vector3(ControlledObject.GetComponent<ColliderN>().TP.transform.localScale.x, ControlledObject.GetComponent<ColliderN>().TP.transform.localScale.y, z);
+                GameObject.Find("AxisFrame_ZCylinder").transform.localScale = new Vector3(manipulator.transform.localScale.x, manipulator.transform.localScale.y, z);
+                LastMousePosition = Input.mousePosition;
+                Debug.Log("z: " + z);
+            }*/
         }
     }
 }
