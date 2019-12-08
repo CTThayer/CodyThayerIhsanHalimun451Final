@@ -4,17 +4,11 @@ using UnityEngine;
 
 public class TreeNodePrimitive : MonoBehaviour
 {
-    public GameObject collider;
+    public GameObject primCollider;
 
     public Color MyColor = new Color(0.1f, 0.1f, 0.2f, 1.0f);
     public Vector3 Pivot;
     public Matrix4x4 TRS_matrix;
-
-    
-
-    // TODO: Add code to move colliders with the primitives so that they are
-    // selectable and can be interacted with using the mouse. Then re-route the
-    // selection back to the TreeNode that owns this primitive.
 
     public void LoadShaderMatrix(ref Matrix4x4 nodeMatrix)
     {
@@ -25,16 +19,10 @@ public class TreeNodePrimitive : MonoBehaviour
         GetComponent<Renderer>().material.SetMatrix("MyXformMat", TRS_matrix);
         GetComponent<Renderer>().material.SetColor("MyColor", MyColor);
 
-        // Handle Collider
-        //Transform selectedCC = transform.GetChild(0);
-        //selectedCC.position = TRS_matrix.GetColumn(3);
-        //selectedCC.rotation = TRS_matrix.rotation;
-        //selectedCC.localScale = TRS_matrix.lossyScale;
-
-
-        collider.transform.position = TRS_matrix.GetColumn(3);
-        collider.transform.rotation = TRS_matrix.rotation;
-        collider.transform.localScale = TRS_matrix.lossyScale;
+        // Transform Collider Object
+        primCollider.transform.position = TRS_matrix.GetColumn(3);
+        primCollider.transform.rotation = TRS_matrix.rotation;
+        primCollider.transform.localScale = TRS_matrix.lossyScale;
     }
 
     public Vector3 GetNodeUpVector()
