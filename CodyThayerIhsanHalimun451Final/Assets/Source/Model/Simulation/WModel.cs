@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class WModel : MonoBehaviour
 {
+    public bool IsRunning;
+
     public Vector3 WindVector;
     public WNode Root;
 
@@ -13,8 +15,6 @@ public class WModel : MonoBehaviour
 
     Vector3 PrevHeadLoc;
     Vector3 PrevTailLoc;
-
-    //Vector3 PrevWindVector;
 
     // Start is called before the first frame update
     void Start()
@@ -30,19 +30,21 @@ public class WModel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // If WindVector controllers have changed, update WindVector
-        if (   wvHead.transform.position != PrevHeadLoc 
-            || wvTail.transform.position != PrevTailLoc  )
+        if (IsRunning)
         {
-            UpdateWindVector();
-            PrevHeadLoc = wvHead.transform.position;
-            PrevTailLoc = wvTail.transform.position;
+            // If WindVector controllers have changed, update WindVector
+            if (wvHead.transform.position != PrevHeadLoc
+                || wvTail.transform.position != PrevTailLoc)
+            {
+                UpdateWindVector();
+                PrevHeadLoc = wvHead.transform.position;
+                PrevTailLoc = wvTail.transform.position;
+            }
+
+            // Run UpdateNodes to execute wind simulation
+            UpdateNodes(Root);
+
         }
-
-        // Run UpdateNodes to execute wind simulation
-        UpdateNodes(Root);
-
-
     }
 
     void UpdateNodes(WNode w)
