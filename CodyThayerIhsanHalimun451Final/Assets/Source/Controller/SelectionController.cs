@@ -9,6 +9,8 @@ public class SelectionController : MonoBehaviour
     public GameObject manipulator_R;
     public float inputDampening;
 
+    public ScaleController scaleController;
+
     GameObject Selection;
     GameObject ControlledObject;
     Vector3 LastMousePosition;
@@ -65,8 +67,23 @@ public class SelectionController : MonoBehaviour
                     ControlledObject = NewSelection;
                     manipulator_R.transform.position = Selection.transform.position;
                     manipulator_R.transform.rotation = Selection.transform.rotation;
+                    Debug.Log("ControlledObject: " + ControlledObject.name);
                 }
             }
+            // If NewSelection is Null reset selector location and clear selection
+            else if (NewSelection == null)
+            {
+                manipulator_R.transform.position = new Vector3(0, 0, 10000);
+                Selection = NewSelection;
+                ControlledObject = NewSelection;
+            }
+
+            
+            // Set ScaleController UI
+            if (ControlledObject != null)
+                scaleController.SetSelectedObject(ControlledObject.transform);
+            else
+                scaleController.SetSelectedObject(null);
         }
         if (Input.GetMouseButton(0) && Selection != null)
         {
