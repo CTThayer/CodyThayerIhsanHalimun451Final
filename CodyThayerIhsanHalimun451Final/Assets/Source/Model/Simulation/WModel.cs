@@ -81,6 +81,21 @@ public class WModel : MonoBehaviour
         {
             W.forward = true;
         }
+
+        //// Can simplify this if-else
+        //if (W.currentR < W.MAX_R || W.currentR > W.MIN_R)
+        //{
+        //    //W.ApplyWindMovement();
+        //    W.ApplyWindMovementVector(WindVector);
+        //}
+        //else if (W.forward && W.currentR >= W.MAX_R)
+        //{
+        //    W.forward = false;
+        //}
+        //else if (!W.forward && W.currentR <= W.MIN_R)
+        //{
+        //    W.forward = true;
+        //}
     }
 
     private void UpdateWindVector()

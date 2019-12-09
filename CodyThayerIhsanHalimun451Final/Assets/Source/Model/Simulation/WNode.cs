@@ -20,7 +20,7 @@ public class WNode : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         OrigUp = this.transform.up;
     }
@@ -76,8 +76,18 @@ public class WNode : MonoBehaviour
         }
         else
         {
-            axis = GetReverseVector();
-            theta = stepsize * Rigidity;
+            axis = GetReverseAxis(WindVector);
+
+            if (currentR > Mathf.Epsilon)
+            {
+                theta = stepsize * Rigidity;
+            }
+            else
+            {
+                theta = stepsize * Rigidity * -1.0f;
+            }
+
+            //theta = stepsize * Rigidity;                // This?
             result = Quaternion.AngleAxis(theta, axis);
             currentR -= stepsize;
         }
@@ -98,13 +108,24 @@ public class WNode : MonoBehaviour
         return axis;
     }
 
-    private Vector3 GetReverseVector()
+    private Vector3 GetReverseAxis(Vector3 WindVector)
     {
-        Quaternion Q = Quaternion.FromToRotation(transform.up, OrigUp);
+        //Quaternion Q = Quaternion.FromToRotation(transform.up, OrigUp);
 
-        float DegToCombined;
+        //float DegToCombined;
+        //Vector3 axis;
+        //Q.ToAngleAxis(out DegToCombined, out axis);
+
         Vector3 axis;
-        Q.ToAngleAxis(out DegToCombined, out axis);
+        if (currentR > Mathf.Epsilon)
+        {
+            axis = Vector3.Cross(transform.up, OrigUp);
+        }
+        else
+        {
+            axis = Vector3.Cross(OrigUp, WindVector);
+        }
+
         return axis;
     }
 
