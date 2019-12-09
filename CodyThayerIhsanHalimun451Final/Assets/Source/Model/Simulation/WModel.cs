@@ -85,14 +85,21 @@ public class WModel : MonoBehaviour
 
     private void UpdateWindVector()
     {
+        // Update actual Vector3 based on the representative U.graphical objects
         WindVector = wvHead.transform.position - wvTail.transform.position;
 
-        wvLine.transform.position = wvTail.transform.position;
-        wvLine.transform.localRotation = Quaternion.FromToRotation(wvLine.transform.up, WindVector);
-        Vector3 scale = wvLine.transform.localScale;
-        scale.y = WindVector.magnitude * 0.5f;
-        wvLine.transform.localScale = scale;
+        //// Update line object position and rotation
+        //wvLine.transform.position = wvTail.transform.position;
+        //wvLine.transform.rotation = Quaternion.FromToRotation(wvLine.transform.up, WindVector);
 
+        //// Update line object scale
+        //Vector3 scale = wvLine.transform.localScale;
+        //scale.y = WindVector.magnitude * 0.5f;
+        //wvLine.transform.localScale = scale;
     }
 
+    public void SetIsRunning(bool b)
+    {
+        IsRunning = b;
+    }
 }

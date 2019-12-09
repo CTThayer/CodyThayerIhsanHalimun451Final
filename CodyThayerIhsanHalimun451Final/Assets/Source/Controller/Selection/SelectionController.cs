@@ -5,10 +5,8 @@ using UnityEngine;
 public class SelectionController : MonoBehaviour
 {
     public Camera cam;
-    //public GameObject manipulator_S;
     public GameObject manipulator_R;
     public float inputDampening;
-
     public ScaleController scaleController;
 
     GameObject Selection;
@@ -18,9 +16,9 @@ public class SelectionController : MonoBehaviour
     void Start()
     {
         Debug.Assert(cam != null);
-        //Debug.Assert(manipulator_S != null);
         Debug.Assert(manipulator_R != null);
         Debug.Assert(inputDampening > 0);
+        Debug.Assert(scaleController != null);
     }
 
 
