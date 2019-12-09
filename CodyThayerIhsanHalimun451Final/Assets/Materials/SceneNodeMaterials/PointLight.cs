@@ -33,6 +33,9 @@ public class PointLight : MonoBehaviour {
         f.transform.localPosition = transform.localPosition;
         f.transform.localScale = new Vector3(2*Far, 2*Far, 2*Far);
         f.GetComponent<Renderer>().material.color = c;
+
+        gameObject.transform.localPosition = new Vector3(gameObject.transform.parent.localPosition.x, gameObject.transform.parent.localPosition.y - 5, gameObject.transform.parent.localPosition.z);
+
     }
 
     public void LoadLightToShader()
