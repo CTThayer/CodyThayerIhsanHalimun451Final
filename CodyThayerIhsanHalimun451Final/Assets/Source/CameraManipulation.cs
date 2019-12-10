@@ -13,6 +13,11 @@ public class CameraManipulation : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        gameObject.GetComponent<Camera>().ResetCullingMatrix();
+        Matrix4x4 m = gameObject.GetComponent<Camera>().cullingMatrix;
+        m.SetRow(0, m.GetRow(0) * 0.5f);
+        m.SetRow(1, m.GetRow(1) * 0.5f);
+        gameObject.GetComponent<Camera>().cullingMatrix = m;
         Debug.Assert(LookAt != null);
     }
 
