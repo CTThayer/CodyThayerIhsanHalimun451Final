@@ -37,32 +37,8 @@ public class WNode : MonoBehaviour
         return OrigUp;
     }
 
-    public void ApplyWindMovement()
-    {
-        
-        // Temp test code
-        Quaternion cR = this.transform.localRotation;
-        Vector3 vecR = cR.eulerAngles;
-
-        if (forward)
-        {
-            vecR.x += stepsize * Rigidity;
-            currentR += stepsize;
-        }
-        else
-        {
-            vecR.x += stepsize * Rigidity * -1.0f;
-            currentR -= stepsize;
-        }
-        
-        this.transform.localRotation = Quaternion.Euler(vecR.x, vecR.y, vecR.z);
-
-
-    }
-
     public void ApplyWindMovementVector(Vector3 WindVector)
     {
-
         Quaternion result;
         float theta;
         Vector3 axis;
@@ -87,13 +63,11 @@ public class WNode : MonoBehaviour
                 theta = stepsize * Rigidity * -1.0f;
             }
 
-            //theta = stepsize * Rigidity;                // This?
             result = Quaternion.AngleAxis(theta, axis);
             currentR -= stepsize;
         }
 
         this.transform.localRotation = this.transform.localRotation * result;
-
 
     }
 
@@ -110,11 +84,6 @@ public class WNode : MonoBehaviour
 
     private Vector3 GetReverseAxis(Vector3 WindVector)
     {
-        //Quaternion Q = Quaternion.FromToRotation(transform.up, OrigUp);
-
-        //float DegToCombined;
-        //Vector3 axis;
-        //Q.ToAngleAxis(out DegToCombined, out axis);
 
         Vector3 axis;
         if (currentR > Mathf.Epsilon)

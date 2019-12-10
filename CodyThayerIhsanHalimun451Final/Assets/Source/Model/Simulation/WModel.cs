@@ -65,7 +65,6 @@ public class WModel : MonoBehaviour
         // Can simplify this if-else
         if (W.forward && W.currentR < W.MAX_R)
         {
-            //W.ApplyWindMovement();
             W.ApplyWindMovementVector(WindVector);
         }
         else if (W.forward && W.currentR >= W.MAX_R)
@@ -74,47 +73,62 @@ public class WModel : MonoBehaviour
         }
         else if (!W.forward && W.currentR > W.MIN_R)
         {
-            //W.ApplyWindMovement();
             W.ApplyWindMovementVector(WindVector);
         }
         else if (!W.forward && W.currentR <= W.MIN_R)
         {
             W.forward = true;
         }
-
-        //// Can simplify this if-else
-        //if (W.currentR < W.MAX_R || W.currentR > W.MIN_R)
-        //{
-        //    //W.ApplyWindMovement();
-        //    W.ApplyWindMovementVector(WindVector);
-        //}
-        //else if (W.forward && W.currentR >= W.MAX_R)
-        //{
-        //    W.forward = false;
-        //}
-        //else if (!W.forward && W.currentR <= W.MIN_R)
-        //{
-        //    W.forward = true;
-        //}
     }
 
     private void UpdateWindVector()
     {
         // Update actual Vector3 based on the representative U.graphical objects
         WindVector = wvHead.transform.position - wvTail.transform.position;
-
-        //// Update line object position and rotation
-        //wvLine.transform.position = wvTail.transform.position;
-        //wvLine.transform.rotation = Quaternion.FromToRotation(wvLine.transform.up, WindVector);
-
-        //// Update line object scale
-        //Vector3 scale = wvLine.transform.localScale;
-        //scale.y = WindVector.magnitude * 0.5f;
-        //wvLine.transform.localScale = scale;
     }
 
     public void SetIsRunning(bool b)
     {
         IsRunning = b;
+        if (IsRunning == true)
+        {
+            SaveOriginalNodeStates(Root);
+        }
+        else
+        {
+            ResetNodes(Root);
+        }
     }
+
+    public bool GetIsRunning()
+    {
+        return IsRunning;
+    }
+
+    private void ResetNodes(WNode wn)
+    {
+        wn.transform.up = wn.GetOriginalupVector();
+        foreach(Transform t in wn.transform)
+        {
+            WNode child = t.GetComponent<WNode>();
+            if (child != null)
+            {
+                ResetNodes(child);
+            }
+        }
+    }
+
+    private void SaveOriginalNodeStates(WNode wn)
+    {
+        wn.SetOriginalUpVector();
+        foreach (Transform t in wn.transform)
+        {
+            WNode child = t.GetComponent<WNode>();
+            if (child != null)
+            {
+                SaveOriginalNodeStates(child);
+            }
+        }
+    }
+
 }

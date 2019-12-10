@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SelectionController : MonoBehaviour
 {
+    public bool IsActive;
+
     public Camera cam;
     public GameObject manipulator_R;
     public float inputDampening;
@@ -12,6 +14,7 @@ public class SelectionController : MonoBehaviour
     GameObject Selection;
     GameObject ControlledObject;
     Vector3 LastMousePosition;
+    
 
     void Start()
     {
@@ -19,14 +22,18 @@ public class SelectionController : MonoBehaviour
         Debug.Assert(manipulator_R != null);
         Debug.Assert(inputDampening > 0);
         Debug.Assert(scaleController != null);
+        Debug.Assert(IsActive == true);
     }
 
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+        if (IsActive)
         {
-            HandleMouseEvents();
+            if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+            {
+                HandleMouseEvents();
+            }
         }
     }
 
@@ -136,4 +143,20 @@ public class SelectionController : MonoBehaviour
         return d *= dir;
     }
 
+    public void SetIsActive(bool active)
+    {
+        IsActive = active;
+        if(IsActive == false)
+        {
+            manipulator_R.transform.position = new Vector3(0, 0, 10000);
+            Selection = null;
+            ControlledObject = null;
+        }
+    }
+
+    public bool GetIsActive()
+    {
+        return IsActive;
+
+    }
 }
